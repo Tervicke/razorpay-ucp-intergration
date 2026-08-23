@@ -4,4 +4,5 @@ node_modules
 data/*.db
 coverage
 dist
+packages/*/dist
 *.tsbuildinfo

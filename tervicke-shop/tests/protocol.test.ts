@@ -1,2 +1,29 @@
-import {describe,expect,it} from "vitest"; import {GET as agents} from "../src/app/agents.md/route"; import {GET as discovery} from "../src/app/.well-known/ucp/route"; import {createMcpServer} from "../src/lib/mcp/server";
-describe("discovery",()=>{it("serves agents.md",async()=>{const r=await agents();expect(r.headers.get("content-type")).toContain("text/markdown");expect(await r.text()).toContain("/api/ucp/mcp")});it("serves a UCP profile",async()=>{const r=await discovery();const x=await r.json();expect(x.ucp.services["dev.ucp.shopping"][0].transport).toBe("mcp");expect(x.ucp.capabilities).toHaveProperty("dev.ucp.shopping.catalog.search")});it("registers MCP tools",()=>{const s:any=createMcpServer();const names=Object.keys(s._registeredTools);expect(names).toEqual(expect.arrayContaining(["search_catalog","lookup_catalog","get_product"]))})});
+import { describe, expect, it } from "vitest";
+import { GET as agents } from "../src/app/agents.md/route";
+import { GET as discovery } from "../src/app/.well-known/ucp/route";
+import { createMcpServer } from "../src/lib/mcp/server";
+
+describe("discovery", () => {
+  it("serves complete agent-facing MCP instructions", async () => {
+    const response = await agents();
+    expect(response.headers.get("content-type")).toContain("text/markdown");
+    const markdown = await response.text();
+    expect(markdown).toContain("/api/ucp/mcp");
+    expect(markdown).toContain("start_authentication");
+    expect(markdown).toContain("Authorization: Bearer <token>");
+    expect(markdown).toContain("Never ask the user to paste");
+  });
+  it("serves a UCP profile", async () => {
+    const response = await discovery();
+    const profile = await response.json();
+    expect(profile.ucp.services["dev.ucp.shopping"][0].transport).toBe("mcp");
+    expect(profile.ucp.capabilities).toHaveProperty("dev.ucp.shopping.catalog.search");
+  });
+  it("composes catalog and identity MCP tools on one server", () => {
+    const server = createMcpServer() as unknown as { _registeredTools: Record<string, unknown> };
+    expect(Object.keys(server._registeredTools)).toEqual(expect.arrayContaining([
+      "search_catalog", "lookup_catalog", "get_product",
+      "start_authentication", "get_authentication_status", "ping",
+    ]));
+  });
+});

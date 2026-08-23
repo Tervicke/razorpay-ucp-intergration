@@ -5,11 +5,15 @@
   "type": "module",
   "workspaces": ["packages/*"],
   "scripts": {
-    "build": "npm run build --workspace=@commerce-sdk/catalog",
-    "typecheck": "npm run typecheck --workspace=@commerce-sdk/catalog",
-    "test": "npm run test --workspace=@commerce-sdk/catalog"
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "dev": "npm run dev --workspace=@commerce-sdk/mcp-server"
   },
   "devDependencies": {
+    "@hono/node-server": "1.19.17",
+    "@types/node": "^22.12.0",
+    "tsx": "^4.20.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   }
