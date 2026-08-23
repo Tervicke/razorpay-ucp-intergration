@@ -1,0 +1,2 @@
+import Link from "next/link"; import type {Product} from "@/lib/catalog/types"; import {formatInr} from "@/lib/format";
+export function ProductCard({product:p}:{product:Product}){return <Link className="card" href={`/products/${p.handle}`}><div className={`product-art art-${p.color.toLowerCase()}`}><span>TERVICKE</span></div><div className="card-copy"><div><p className="eyebrow">{p.category}</p><h3>{p.title}</h3></div><strong>{formatInr(p.variants[0].price)}</strong></div></Link>}

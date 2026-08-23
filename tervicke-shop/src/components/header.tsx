@@ -1,0 +1,1 @@
+import Link from "next/link"; export function Header(){return <header><Link className="brand" href="/">TERVICKE<span>SHOP</span></Link><nav><Link href="/products">Shop all</Link><Link href="/dev/agent">Agent protocol</Link></nav></header>}

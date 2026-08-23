@@ -1,0 +1,1 @@
+export const debugEnabled=()=>process.env.DEBUG_AGENT==="true"; export function debug(label:string,value?:unknown){if(!debugEnabled())return;console.error(`\n[${label}]`);if(value!==undefined)console.error(typeof value==="string"?value:JSON.stringify(value,null,2));}

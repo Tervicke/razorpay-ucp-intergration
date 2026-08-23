@@ -1,0 +1,2 @@
+import {catalogService} from "@/lib/catalog/catalog-service"; import {toUcpProduct,ucpMeta} from "@/lib/ucp/adapters";
+export function searchCatalog(input:any){const c=input.catalog||input; const r=catalogService.search({query:c.query,category:c.filters?.category||c.category,priceMin:c.filters?.price?.min,priceMax:c.filters?.price?.max,limit:c.pagination?.limit,cursor:c.pagination?.cursor});return {ucp:ucpMeta(["dev.ucp.shopping.catalog.search"]),products:r.products.map(toUcpProduct),pagination:{next_cursor:r.nextCursor},messages:[]};}

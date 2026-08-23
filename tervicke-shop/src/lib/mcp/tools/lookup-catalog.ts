@@ -1,0 +1,2 @@
+import {catalogService} from "@/lib/catalog/catalog-service"; import {toUcpProduct,ucpMeta} from "@/lib/ucp/adapters";
+export function lookupCatalog(input:any){const ids=input.catalog?.ids||input.ids;const products=catalogService.lookup(ids).map(toUcpProduct);const found=new Set(products.flatMap(p=>[p.id,p.handle,...p.variants.flatMap(v=>[v.id,v.sku])]));const missing=ids.filter((id:string)=>!found.has(id));return {ucp:ucpMeta(["dev.ucp.shopping.catalog.lookup"]),products,messages:missing.map((id:string)=>({type:"info",code:"not_found",content:id}))};}

@@ -1,0 +1,2 @@
+import {catalogService} from "@/lib/catalog/catalog-service"; import {toUcpProduct,ucpMeta} from "@/lib/ucp/adapters";
+export function getProduct(input:any){const c=input.catalog||input;const p=catalogService.get(c.id,c.selected);return p?{ucp:ucpMeta(["dev.ucp.shopping.catalog.lookup"]),product:{...toUcpProduct(p),selected:c.selected||[]},messages:[]}:{ucp:{...ucpMeta(["dev.ucp.shopping.catalog.lookup"]),status:"error"},messages:[{type:"error",code:"not_found",content:c.id}]};}

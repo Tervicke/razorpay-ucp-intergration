@@ -1,0 +1,1 @@
+import "./globals.css"; import {Header} from "@/components/header"; export const metadata={title:{default:"Tervicke Shop",template:"%s — Tervicke Shop"},description:"Independent Indian streetwear, built for humans and shopping agents."}; export default function Layout({children}:{children:React.ReactNode}){return <html lang="en"><body><Header/>{children}</body></html>}
