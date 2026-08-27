@@ -1,0 +1,21 @@
+# Secrets
+.env
+**/.env
+
+# Python
+**/.venv/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+*.py[cod]
+
+# Node.js and build output
+**/node_modules/
+**/.next/
+**/dist/
+**/.wrangler/
+**/.vinext/
+
+# Local tooling and OS files
+.DS_Store
+*.log
