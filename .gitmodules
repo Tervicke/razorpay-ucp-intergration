@@ -1,0 +1,3 @@
+[submodule "experiments/ucp-mcp-server"]
+	path = experiments/ucp-mcp-server
+	url = https://github.com/nguthrie/ucp-mcp-server
