@@ -1,1 +1,0 @@
-import {agentsMarkdown} from "@/lib/ucp/profile"; export const dynamic="force-dynamic"; export async function GET(){return new Response(agentsMarkdown(),{headers:{"content-type":"text/markdown; charset=utf-8","cache-control":"public, max-age=300"}})}

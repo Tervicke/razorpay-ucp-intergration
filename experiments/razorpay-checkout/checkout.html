@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <title>Test Razorpay Order</title>
+</head>
+<body>
+  <button id="pay-button">Pay ₹499</button>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script>
+    const options = {
+      key: "rzp_test_REPLACE_WITH_KEY_ID",
+      amount: 49900,
+      currency: "INR",
+      name: "Tervicke Shop",
+      description: "UCP test checkout",
+
+      // Replace this every time create_order.py creates a new order
+      order_id: "order_REPLACE_WITH_ORDER_ID",
+
+      handler: function (response) {
+        console.log(response);
+
+        document.body.innerHTML = `
+          <h2>Payment completed</h2>
+          <p>Payment ID: ${response.razorpay_payment_id}</p>
+          <p>Order ID: ${response.razorpay_order_id}</p>
+          <p>Signature: ${response.razorpay_signature}</p>
+        `;
+      },
+
+      prefill: {
+        name: "Test Buyer",
+        email: "test@example.com",
+        contact: "9999999999"
+      },
+
+      theme: {
+        color: "#3399cc"
+      }
+    };
+
+    document
+      .getElementById("pay-button")
+      .onclick = function () {
+        const checkout = new Razorpay(options);
+        checkout.open();
+      };
+  </script>
+</body>
+</html>

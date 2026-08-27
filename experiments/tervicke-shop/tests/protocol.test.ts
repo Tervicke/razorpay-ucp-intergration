@@ -6,7 +6,7 @@ import { createMcpServer } from "../src/lib/mcp/server";
 describe("discovery", () => {
   it("serves complete agent-facing MCP instructions", async () => {
     const response = await agents();
-    expect(response.headers.get("content-type")).toContain("text/markdown");
+    expect(response.headers.get("content-type")).toBe("text/plain; charset=utf-8");
     const markdown = await response.text();
     expect(markdown).toContain("/api/ucp/mcp");
     expect(markdown).toContain("start_authentication");
