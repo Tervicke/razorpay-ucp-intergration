@@ -120,7 +120,8 @@ class Product(ProductBase):
 
   id = Column(String, primary_key=True)
   title = Column(String)
-  price = Column(Integer)  # Price in cents
+  description = Column(String, nullable=True)
+  price = Column(Integer)  # Price in the currency's minor unit
   image_url = Column(String, nullable=True)
 
 

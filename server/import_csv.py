@@ -77,6 +77,7 @@ async def import_csv_data() -> None:
             Product(
               id=row["id"],
               title=row["title"],
+              description=row.get("description") or None,
               price=int(row["price"]),
               image_url=row["image_url"],
             )

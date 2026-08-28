@@ -195,12 +195,14 @@ class IntegrationTest(absltest.TestCase):
         db.Product(
           id="rose",
           title="Red Rose",
+          description="Romantic red flowers for anniversaries",
           price=1000,
           image_url="http://rose.com",
         ),
         db.Product(
           id="tulip",
           title="White Tulip",
+          description="Elegant white flowers for congratulations",
           price=800,
           image_url="http://tulip.com",
         ),
@@ -1440,6 +1442,46 @@ class IntegrationTest(absltest.TestCase):
         str,
         "server must determine a currency when the platform omits it",
       )
+      self.assertEqual(body["currency"], "INR")
+
+  def test_rest_catalog_searches_descriptions_and_typos(self) -> None:
+    """REST catalog search ranks description terms and approximate spelling."""
+    with self.client:
+      response = self.client.get("/products/search", params={"q": "romance"})
+      self.assertEqual(response.status_code, 200, response.text)
+      self.assertEqual(response.json()["products"][0]["id"], "rose")
+      self.assertEqual(response.json()["products"][0]["currency"], "INR")
+
+      response = self.client.get("/products/search", params={"q": "tulipz"})
+      self.assertEqual(response.status_code, 200, response.text)
+      self.assertEqual(response.json()["products"][0]["id"], "tulip")
+
+  def test_mcp_catalog_search(self) -> None:
+    """MCP exposes the same ranked product catalog search."""
+    with self.client:
+      response = self.client.post(
+        "/mcp",
+        json={
+          "jsonrpc": "2.0",
+          "id": 71,
+          "method": "tools/call",
+          "params": {
+            "name": "search_catalog",
+            "arguments": {
+              "meta": {
+                "ucp-agent": {"profile": "https://agent.example/profile"}
+              },
+              "query": "anniversary flowers",
+              "limit": 2,
+            },
+          },
+        },
+      )
+      self.assertEqual(response.status_code, 200, response.text)
+      body = response.json()
+      self.assertNotIn("error", body, body)
+      products = body["result"]["structuredContent"]["products"]
+      self.assertEqual(products[0]["id"], "rose")
 
   def test_update_omitting_server_determined_fields(self) -> None:
     """The update path reads the same omitted field and must not fail."""
@@ -1529,6 +1571,95 @@ class IntegrationTest(absltest.TestCase):
       )
       self.assertEqual(response.status_code, 201, f"Response: {response.text}")
       self.assertIsInstance(response.json().get("id"), str)
+
+  def test_mcp_checkout_lifecycle(self) -> None:
+    """MCP tools execute the same database-backed checkout business logic."""
+
+    def call_tool(request_id: int, name: str, arguments: dict) -> dict:
+      response = self.client.post(
+        "/mcp",
+        json={
+          "jsonrpc": "2.0",
+          "id": request_id,
+          "method": "tools/call",
+          "params": {"name": name, "arguments": arguments},
+        },
+      )
+      self.assertEqual(response.status_code, 200, response.text)
+      body = response.json()
+      self.assertNotIn("error", body, body)
+      self.assertFalse(body["result"].get("isError", False), body)
+      return body["result"]["structuredContent"]
+
+    create_body = self._create_checkout_payload(
+      "ignored_mcp_id", [("rose", "Red Rose", 1000, 1)]
+    ).model_dump(mode="json", exclude_none=True, by_alias=True)
+
+    with self.client:
+      created = call_tool(
+        1,
+        "create_checkout",
+        {
+          "meta": {"ucp-agent": {"profile": "https://agent.example/profile"}},
+          "checkout": create_body,
+        },
+      )
+      checkout_id = self.get_resource_id(created["id"])
+
+      fetched = call_tool(
+        2,
+        "get_checkout",
+        {
+          "meta": {"ucp-agent": {"profile": "https://agent.example/profile"}},
+          "id": checkout_id,
+        },
+      )
+      self.assertEqual(self.get_resource_id(fetched["id"]), checkout_id)
+
+      canceled = call_tool(
+        3,
+        "cancel_checkout",
+        {
+          "meta": {
+            "ucp-agent": {"profile": "https://agent.example/profile"},
+            "idempotency-key": "mcp_cancel",
+          },
+          "id": checkout_id,
+        },
+      )
+      self.assertEqual(canceled["status"], "canceled")
+
+      cart = call_tool(
+        4,
+        "create_cart",
+        {
+          "meta": {"ucp-agent": {"profile": "https://agent.example/profile"}},
+          "cart": {"line_items": [{"quantity": 1, "item": {"id": "rose"}}]},
+        },
+      )
+      cart_id = cart["id"]
+      self.assertEqual(cart["currency"], "INR")
+      fetched_cart = call_tool(
+        5,
+        "get_cart",
+        {
+          "meta": {"ucp-agent": {"profile": "https://agent.example/profile"}},
+          "id": cart_id,
+        },
+      )
+      self.assertEqual(fetched_cart["id"], cart_id)
+      canceled_cart = call_tool(
+        6,
+        "cancel_cart",
+        {
+          "meta": {
+            "ucp-agent": {"profile": "https://agent.example/profile"},
+            "idempotency-key": "mcp_cart_cancel",
+          },
+          "id": cart_id,
+        },
+      )
+      self.assertEqual(canceled_cart["id"], cart_id)
 
 
 if __name__ == "__main__":

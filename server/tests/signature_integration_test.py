@@ -165,7 +165,7 @@ class PermissiveModeTest(_SigTestBase):
   require_signatures = False
 
   def test_mcp_unsigned_allowed(self) -> None:
-    """MCP discovery keeps working unsigned in the default mode."""
+    """MCP discovery and its executable-tool contract work unsigned."""
     with self.client:
       response = self.client.post(
         "/mcp",
@@ -173,7 +173,40 @@ class PermissiveModeTest(_SigTestBase):
         json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
       )
     self.assertEqual(response.status_code, 200)
-    self.assertIn("result", response.json())
+    tools = response.json()["result"]["tools"]
+    self.assertEqual(
+      {tool["name"] for tool in tools},
+      {
+        "create_checkout",
+        "get_checkout",
+        "update_checkout",
+        "complete_checkout",
+        "cancel_checkout",
+        "create_cart",
+        "get_cart",
+        "update_cart",
+        "cancel_cart",
+      },
+    )
+
+    # Cancellation must carry the explicit idempotency key required by UCP.
+    with self.client:
+      response = self.client.post(
+        "/mcp",
+        json={
+          "jsonrpc": "2.0",
+          "id": 2,
+          "method": "tools/call",
+          "params": {
+            "name": "cancel_checkout",
+            "arguments": {
+              "meta": {"ucp-agent": {"profile": self.profile_url}},
+              "id": "checkout_1",
+            },
+          },
+        },
+      )
+    self.assertEqual(response.json()["error"]["code"], -32602)
 
   def test_official_conformance_replay_no_fetch(self) -> None:
     """Legacy headers with no Signature-Input succeed without a key fetch."""

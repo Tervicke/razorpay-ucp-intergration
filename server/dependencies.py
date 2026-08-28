@@ -37,6 +37,7 @@ from fastapi import HTTPException
 from fastapi import Request
 from pydantic import BaseModel
 from services.cart_service import CartService
+from services.catalog_service import CatalogService
 from services.checkout_service import CheckoutService
 from services.fulfillment_service import FulfillmentService
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -234,6 +235,13 @@ async def get_products_db() -> AsyncGenerator[AsyncSession, None]:
   """Dependency provider for Products DB session."""
   async with db.manager.products_session_factory() as session:
     yield session
+
+
+def get_catalog_service(
+  products_session: Annotated[AsyncSession, Depends(get_products_db)],
+) -> CatalogService:
+  """Dependency provider for product catalog search."""
+  return CatalogService(products_session)
 
 
 async def get_transactions_db() -> AsyncGenerator[AsyncSession, None]:
