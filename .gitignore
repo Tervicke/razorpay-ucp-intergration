@@ -19,3 +19,8 @@
 # Local tooling and OS files
 .DS_Store
 *.log
+
+# Local database recovery snapshots
+server/db_backups/
+server/*.db-shm
+server/*.db-wal

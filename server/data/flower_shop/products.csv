@@ -1,7 +1,9 @@
-id,title,price,image_url
-bouquet_roses,Bouquet of Red Roses,3500,https://example.com/roses.jpg
-pot_ceramic,Ceramic Pot,1500,https://example.com/pot.jpg
-bouquet_sunflowers,Sunflower Bundle,2500,https://example.com/sunflowers.jpg
-bouquet_tulips,Spring Tulips,3000,https://example.com/tulips.jpg
-orchid_white,White Orchid,4500,https://example.com/orchid.jpg
-gardenias,Gardenias,2000,https://example.com/gardenias.jpg
+id,title,description,price,image_url
+rose_bouquet,Red Rose Bouquet,Classic red roses for anniversaries romance and heartfelt gifts,89900,https://images.unsplash.com/photo-1561181286-d3fee7d55364
+marigold_garland,Marigold Garland,Fresh orange and yellow marigolds for puja festivals and home decoration,49900,https://images.unsplash.com/photo-1602923668104-8f9e03d0cfc4
+jasmine_gajra,Jasmine Gajra Set,Fragrant jasmine flowers for hair adornment weddings and traditional occasions,29900,https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11
+puja_flower_basket,Puja Flower Basket,Assorted fresh flowers prepared for daily worship temple visits and religious ceremonies,59900,https://images.unsplash.com/photo-1497250681960-ef046c08a56e
+sunflower_bouquet,Sunflower Bouquet,Bright cheerful sunflowers for birthdays congratulations and get-well wishes,79900,https://images.unsplash.com/photo-1597848212624-a19eb35e2651
+wedding_rose_arrangement,Wedding Rose Arrangement,Premium rose arrangement for Indian weddings stages receptions and celebrations,249900,https://images.unsplash.com/photo-1523438885200-e635ba2c371e
+white_orchid_plant,White Orchid Plant,Elegant potted white orchid for homes offices housewarmings and lasting gifts,129900,https://images.unsplash.com/photo-1566907225472-6e99c7b55b90
+ceramic_planter,Ceramic Planter,Hand-finished decorative planter for indoor plants desks and home decor,69900,https://images.unsplash.com/photo-1485955900006-10f4d324d411

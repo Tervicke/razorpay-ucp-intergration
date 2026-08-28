@@ -19,6 +19,10 @@
 This is a reference implementation of a UCP Merchant Server, designed to be
 deployable both inside and outside of Google.
 
+The included demo merchant is **Gulbahar Flowers**, a fictional Bengaluru
+flower shop. Its catalog, delivery options, customers, and addresses are
+India-first, and all monetary amounts use INR in paise.
+
 ## Payment Handler Specifications
 
 - [Razorpay Payment Link payment handler](docs/razorpay-payment-link-handler.md)
@@ -57,36 +61,34 @@ cd razorPay/server
 uv pip install -e ../../../../python-sdk
 ```
 
-## Initialize the sample database
+## Catalog and retained databases
 
-The test server is a store front for a flower shop; we have some test data to
-exemplify ordering various items. The data is a simple SQLite database created
-in a separate step to allow easy experimentation and inspection after each
-request.
+The source catalog lives in `data/flower_shop/`. The working SQLite files are
+`products.db` and `transactions.db`, configured in `.env`. They are retained so
+orders and payment history survive restarts; do not run the importer during
+normal startup.
 
-Run the following commands to create a local database populated with example
-test data. This script maps raw product information into the UCP schema so the
-sample server can respond to queries.
+Only run the importer when intentionally resetting the demo lookup data:
 
 ```shell
-mkdir /tmp/ucp_test
 uv run import_csv.py \
-    --products_db_path=/tmp/ucp_test/products.db \
-    --transactions_db_path=/tmp/ucp_test/transactions.db \
+    --products_db_path=products.db \
+    --transactions_db_path=transactions.db \
     --data_dir=data/flower_shop
 ```
 
 ## Run the Server
 
-Start the server on port 8182, pointing to your initialized data.
+Start the server on port 8182. Database paths, INR currency, and Razorpay
+credentials are loaded from `server/.env`.
 
 Start it in the background so we can use the terminal for other commands or
 start the server and the client in separate terminals.
 
 ```shell
 uv run server.py \
-   --products_db_path=/tmp/ucp_test/products.db \
-   --transactions_db_path=/tmp/ucp_test/transactions.db \
+   --products_db_path=products.db \
+   --transactions_db_path=transactions.db \
    --port=8182 &
 SERVER_PID=$!
 ```
@@ -216,6 +218,56 @@ instruments. Run the below command to retrieve the discovery profile for your
 local business server.
 
 `curl -X GET http://localhost:8182/.well-known/ucp | python3 -m json.tool`
+
+### Catalog search
+
+Search product IDs, titles, and descriptions through REST. Results are ranked
+by exact matches, substrings, token overlap, and approximate spelling. Omit
+`q` to browse the entire catalog.
+
+```shell
+curl --get http://localhost:8182/products/search \
+  --data-urlencode "q=flowers for puja" \
+  --data-urlencode "limit=5"
+```
+
+Amounts are returned in paise together with `"currency": "INR"`.
+
+### MCP transport
+
+The discovery profile also advertises `POST /mcp`. It exposes catalog search
+and the same checkout business logic as REST through ten MCP tools.
+`search_catalog` accepts `query` and `limit`; an empty query returns the full
+catalog. The checkout tools are `create_checkout`,
+`get_checkout`, `update_checkout`, `complete_checkout`, and `cancel_checkout`.
+The corresponding cart tools are `create_cart`, `get_cart`, `update_cart`, and
+`cancel_cart`.
+
+An MCP host first sends `initialize`, followed by `tools/list`. It executes a
+tool with the standard `tools/call` request shape:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "get_checkout",
+    "arguments": {
+      "meta": {
+        "ucp-agent": {"profile": "https://platform.example/ucp-profile"}
+      },
+      "id": "checkout-id-from-create_checkout"
+    }
+  }
+}
+```
+
+`complete_checkout`, `cancel_checkout`, and `cancel_cart` require
+`meta["idempotency-key"]`, as defined by the UCP Shopping MCP contract. An MCP
+host must reuse the same key when retrying the same mutation. Tool results
+include both MCP text content and `structuredContent` containing the UCP
+response.
 
 Response:
 

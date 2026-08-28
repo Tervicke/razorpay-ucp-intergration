@@ -130,7 +130,7 @@ class CartService:
       ),
       id=cart_id,
       line_items=line_items,
-      currency="USD",
+      currency=config.get_default_currency(),
       totals=[
         {"type": "subtotal", "amount": 0},
         {"type": "total", "amount": 0},

@@ -36,7 +36,7 @@ _PROFILE_CACHE = None
 # signals, merchants determine currency". A conformant platform therefore does
 # not send it, and the generated CheckoutCreateRequest has no such field. This
 # sample serves a single market, so the determination is a constant.
-DEFAULT_CURRENCY = "USD"
+DEFAULT_CURRENCY = os.getenv("DEFAULT_CURRENCY", "INR").upper()
 
 
 def get_default_currency() -> str:

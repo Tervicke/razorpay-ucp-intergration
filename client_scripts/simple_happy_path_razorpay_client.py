@@ -348,14 +348,14 @@ Note:
     logger.info("\nSTEP 1: Creating a new Cart...")
 
     # We start with one item: "Red Rose"
-    item1 = item_create_request.ItemCreateRequest(id="bouquet_roses")
+    item1 = item_create_request.ItemCreateRequest(id="rose_bouquet")
     line_item1 = line_item_create_request.LineItemCreateRequest(
       quantity=1, item=item1
     )
 
     # We include the buyer
     buyer_request = buyer_create_request.BuyerCreateRequest(
-      full_name="John Doe", email="john.doe@example.com"
+      full_name="Aarav Sharma", email="aarav.sharma@example.com"
     )
 
     create_payload = cart_create_request.CartCreateRequest(
@@ -417,7 +417,7 @@ Note:
     logger.info("\nSTEP 2: Adding a second item (Ceramic Pot)...")
 
     # Update Item 1 (Roses) - Keep quantity 1
-    item1_update = item_update_request.ItemUpdateRequest(id="bouquet_roses")
+    item1_update = item_update_request.ItemUpdateRequest(id="rose_bouquet")
     line_item1_update = line_item_update_request.LineItemUpdateRequest(
       id=cart_data["line_items"][0]["id"],
       quantity=1,
@@ -425,7 +425,7 @@ Note:
     )
 
     # Add Item 2 (Ceramic Pot) - Quantity 2
-    item2_update = item_update_request.ItemUpdateRequest(id="pot_ceramic")
+    item2_update = item_update_request.ItemUpdateRequest(id="ceramic_planter")
     line_item2_update = line_item_update_request.LineItemUpdateRequest(
       quantity=2,
       item=item2_update,
@@ -488,20 +488,22 @@ Note:
     li_1 = next(
       li
       for li in cart_data["line_items"]
-      if li["item"]["id"] == "bouquet_roses"
+      if li["item"]["id"] == "rose_bouquet"
     )
     li_2 = next(
-      li for li in cart_data["line_items"] if li["item"]["id"] == "pot_ceramic"
+      li
+      for li in cart_data["line_items"]
+      if li["item"]["id"] == "ceramic_planter"
     )
 
-    item1_update = item_update_request.ItemUpdateRequest(id="bouquet_roses")
+    item1_update = item_update_request.ItemUpdateRequest(id="rose_bouquet")
     line_item1_update = line_item_update_request.LineItemUpdateRequest(
       id=li_1["id"],
       quantity=1,
       item=item1_update,
     )
 
-    item2_update = item_update_request.ItemUpdateRequest(id="pot_ceramic")
+    item2_update = item_update_request.ItemUpdateRequest(id="ceramic_planter")
     line_item2_update = line_item_update_request.LineItemUpdateRequest(
       id=li_2["id"],
       quantity=2,
@@ -632,16 +634,16 @@ Note:
       li_1 = next(
         li
         for li in checkout_data["line_items"]
-        if li["item"]["id"] == "bouquet_roses"
+        if li["item"]["id"] == "rose_bouquet"
       )
 
       li_2 = next(
         li
         for li in checkout_data["line_items"]
-        if li["item"]["id"] == "pot_ceramic"
+        if li["item"]["id"] == "ceramic_planter"
       )
 
-      item1_update = item_update_request.ItemUpdateRequest(id="bouquet_roses")
+      item1_update = item_update_request.ItemUpdateRequest(id="rose_bouquet")
 
       line_item1_update = line_item_update_request.LineItemUpdateRequest(
         id=li_1["id"],
@@ -649,7 +651,7 @@ Note:
         item=item1_update,
       )
 
-      item2_update = item_update_request.ItemUpdateRequest(id="pot_ceramic")
+      item2_update = item_update_request.ItemUpdateRequest(id="ceramic_planter")
 
       line_item2_update = line_item_update_request.LineItemUpdateRequest(
         id=li_2["id"],

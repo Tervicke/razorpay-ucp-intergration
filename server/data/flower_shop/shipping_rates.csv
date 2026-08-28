@@ -1,4 +1,4 @@
 id,country_code,service_level,price,title
-std-ship,default,standard,500,Standard Shipping
-exp-ship-us,US,express,1500,Express Shipping (US)
-exp-ship-intl,default,express,2500,International Express
+standard-in,IN,standard,0,Standard Delivery
+same-day-in,IN,same_day,9900,Same-day Delivery
+express-in,IN,express,19900,Express 2-hour Delivery

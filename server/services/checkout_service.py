@@ -211,7 +211,10 @@ class CheckoutService:
       source_context = checkout_req.context
       source_signals = checkout_req.signals
       source_attribution = checkout_req.attribution
-      source_currency = getattr(checkout_req, "currency", None) or "USD"
+      source_currency = (
+        getattr(checkout_req, "currency", None)
+        or config.get_default_currency()
+      )
       source_discounts = checkout_req.discounts
 
     # `id` carries `ucp_request: omit`, so the server assigns it and never
