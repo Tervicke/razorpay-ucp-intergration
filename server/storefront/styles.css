@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display:ital@0;1&display=swap");
+
+:root {
+  --ink: #183b32;
+  --forest: #173f35;
+  --cream: #f8f3e8;
+  --paper: #fffdf8;
+  --marigold: #ed9d32;
+  --rose: #b94d58;
+  --muted: #6f7972;
+  --line: #ded9cc;
+  --shadow: 0 18px 60px rgba(30, 55, 46, 0.11);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: "DM Sans", sans-serif; }
+a { color: inherit; }
+button, input { font: inherit; }
+button, .primary-button { transition: transform 160ms ease, background 160ms ease; }
+button:hover, .primary-button:hover { transform: translateY(-2px); }
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.site-header { height: 84px; padding: 0 clamp(24px, 6vw, 92px); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(23, 63, 53, 0.1); background: rgba(255, 253, 248, 0.94); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-mark { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: var(--forest); color: white; font-family: "DM Serif Display"; font-size: 22px; }
+.brand strong { display: block; font: 24px/0.9 "DM Serif Display"; }
+.brand small { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; }
+nav { display: flex; gap: 34px; }
+nav a { font-size: 14px; font-weight: 600; text-decoration: none; }
+
+.hero { min-height: 620px; display: grid; grid-template-columns: 1.05fr 0.95fr; background: var(--cream); overflow: hidden; }
+.hero-copy { padding: 110px clamp(30px, 7vw, 110px); align-self: center; }
+.eyebrow { margin: 0 0 18px; color: var(--rose); font-size: 12px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; }
+h1, h2 { font-family: "DM Serif Display", serif; font-weight: 400; }
+h1 { margin: 0; font-size: clamp(54px, 6.4vw, 92px); line-height: 0.94; letter-spacing: -0.035em; }
+h1 em { color: var(--rose); }
+.hero-description { max-width: 530px; margin: 30px 0 36px; color: #58665f; font-size: 17px; line-height: 1.75; }
+.primary-button { display: inline-block; padding: 15px 24px; border-radius: 3px; color: white; background: var(--forest); text-decoration: none; font-size: 14px; font-weight: 600; }
+.hero-art { min-height: 620px; position: relative; background: var(--forest); overflow: hidden; }
+.hero-art::before { content: ""; position: absolute; width: 450px; height: 450px; border: 1px solid rgba(255,255,255,.13); border-radius: 50%; top: 70px; right: -70px; }
+.hero-art p { position: absolute; z-index: 3; right: 12%; bottom: 12%; margin: 0; color: var(--cream); font: italic 37px/1.1 "DM Serif Display"; text-align: right; }
+.hero-art strong { color: #f0b34f; font-weight: 400; }
+.sun { position: absolute; width: 170px; height: 170px; left: 16%; top: 16%; border-radius: 50%; background: var(--marigold); box-shadow: 0 0 0 28px rgba(237,157,50,.12), 0 0 0 58px rgba(237,157,50,.06); }
+.stem { position: absolute; width: 4px; height: 430px; background: #6f9a76; transform-origin: bottom; bottom: -40px; left: 43%; border-radius: 50%; }
+.stem-one { transform: rotate(-22deg); } .stem-two { left: 62%; transform: rotate(18deg); height: 360px; }
+.petal { position: absolute; width: 130px; height: 65px; border-radius: 100% 0 100% 0; background: var(--rose); opacity: .92; }
+.petal-one { left: 27%; top: 47%; transform: rotate(25deg); } .petal-two { left: 49%; top: 38%; transform: rotate(120deg); background: #f0b34f; } .petal-three { left: 57%; top: 58%; transform: rotate(155deg); background: #e7d9bd; }
+
+.catalog-section { padding: 100px clamp(24px, 6vw, 92px) 120px; }
+.section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; }
+.section-heading h2, .order-intro h2 { margin: 0; font-size: clamp(42px, 5vw, 68px); line-height: 1; }
+.search-form { width: min(440px, 100%); display: flex; border-bottom: 1px solid var(--ink); }
+.search-form input { flex: 1; min-width: 0; padding: 14px 4px; border: 0; outline: 0; background: transparent; }
+.search-form button { border: 0; background: transparent; color: var(--ink); font-weight: 600; cursor: pointer; }
+.result-summary { min-height: 22px; margin: 28px 0 8px; color: var(--muted); font-size: 13px; }
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px 20px; }
+.product-card { min-width: 0; }
+.product-image-wrap { aspect-ratio: 4 / 5; overflow: hidden; background: #eee6d7; position: relative; }
+.product-image { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 500ms ease; }
+.product-card:hover .product-image { transform: scale(1.035); }
+.product-number { position: absolute; left: 12px; top: 12px; padding: 5px 8px; background: rgba(255,253,248,.9); font-size: 10px; letter-spacing: .12em; }
+.product-copy { padding: 17px 2px 0; }
+.product-title-row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.product-title { margin: 0; font: 23px/1.15 "DM Serif Display"; }
+.product-price { white-space: nowrap; font-size: 14px; font-weight: 600; }
+.product-description { margin: 9px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.product-id { display: inline-block; margin-top: 12px; color: #8c918c; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.state-message { padding: 40px; border: 1px dashed var(--line); text-align: center; color: var(--muted); }
+
+.order-section { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; padding: 100px clamp(24px, 7vw, 110px); color: white; background: var(--forest); }
+.eyebrow.light { color: #efb563; }
+.order-intro p:last-child { max-width: 410px; color: #b9c9c3; line-height: 1.7; }
+.order-panel { align-self: start; padding: 36px; border-radius: 5px; color: var(--ink); background: var(--paper); box-shadow: var(--shadow); }
+.order-form label { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+.order-input-row { display: flex; gap: 10px; }
+.order-input-row input { flex: 1; min-width: 0; padding: 14px; border: 1px solid var(--line); outline: none; }
+.order-input-row input:focus { border-color: var(--forest); }
+.order-input-row button { padding: 0 20px; border: 0; border-radius: 2px; color: white; background: var(--rose); cursor: pointer; font-weight: 600; }
+.order-result { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--line); }
+.order-topline { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+.order-topline h3 { margin: 2px 0 4px; font: 29px "DM Serif Display"; }
+.order-reference { color: var(--muted); font-size: 12px; word-break: break-all; }
+.status-pill { padding: 7px 10px; border-radius: 100px; color: var(--forest); background: #dcebdc; font-size: 11px; font-weight: 600; text-transform: capitalize; }
+.order-items { margin: 24px 0; border-top: 1px solid var(--line); }
+.order-item, .order-total { display: flex; justify-content: space-between; gap: 15px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.order-item small { display: block; margin-top: 3px; color: var(--muted); }
+.order-total { border: 0; font-weight: 600; font-size: 17px; }
+.error-message { color: #9f303b; line-height: 1.5; }
+
+footer { padding: 38px clamp(24px, 6vw, 92px); display: flex; justify-content: space-between; color: var(--muted); background: var(--paper); font-size: 12px; }
+footer span { color: var(--ink); font: 21px "DM Serif Display"; }
+
+@media (max-width: 980px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero { grid-template-columns: 1fr; }
+  .hero-art { min-height: 460px; }
+  .order-section { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .site-header { height: 72px; } nav { gap: 15px; } nav a:first-child { display: none; }
+  .hero-copy { padding-top: 75px; padding-bottom: 75px; }
+  .hero-art { min-height: 380px; }
+  .section-heading { align-items: stretch; flex-direction: column; }
+  .product-grid { grid-template-columns: 1fr; }
+  .order-input-row { flex-direction: column; }
+  .order-input-row button { padding: 14px; }
+  .order-panel { padding: 24px; }
+  footer { align-items: start; flex-direction: column; }
+}

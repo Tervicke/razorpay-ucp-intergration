@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#173f35" />
+    <title>Gulbahar Flowers</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#catalog" aria-label="Gulbahar Flowers home">
+        <span class="brand-mark" aria-hidden="true">गु</span>
+        <span><strong>Gulbahar</strong><small>Flowers for every occasion</small></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="#catalog">Flowers</a>
+        <a href="#track-order">Track order</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Freshly prepared with care</p>
+          <h1>Flowers for every<br /><em>Indian celebration.</em></h1>
+          <p class="hero-description">
+            Thoughtful bouquets, festive garlands, and puja flowers—prepared
+            fresh and delivered with care.
+          </p>
+          <a class="primary-button" href="#catalog">Explore the collection</a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <span class="sun"></span><span class="stem stem-one"></span>
+          <span class="stem stem-two"></span><span class="petal petal-one"></span>
+          <span class="petal petal-two"></span><span class="petal petal-three"></span>
+          <p>Flowers say it<br /><strong>beautifully.</strong></p>
+        </div>
+      </section>
+
+      <section class="catalog-section" id="catalog">
+        <div class="section-heading">
+          <div><p class="eyebrow">The collection</p><h2>Find the right flowers</h2></div>
+          <form class="search-form" id="catalog-search" role="search">
+            <label class="sr-only" for="search-query">Search flowers</label>
+            <input id="search-query" type="search" placeholder="Try “flowers for puja”" />
+            <button type="submit" aria-label="Search">Search</button>
+          </form>
+        </div>
+        <p class="result-summary" id="result-summary" aria-live="polite"></p>
+        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <div class="state-message hidden" id="catalog-state"></div>
+      </section>
+
+      <section class="order-section" id="track-order">
+        <div class="order-intro">
+          <p class="eyebrow light">Your order</p>
+          <h2>Follow every petal.</h2>
+          <p>Enter the order ID returned after checkout to see its latest details.</p>
+        </div>
+        <div class="order-panel">
+          <form class="order-form" id="order-form">
+            <label for="order-id">Order ID</label>
+            <div class="order-input-row">
+              <input id="order-id" required autocomplete="off" placeholder="e.g. 5a9107e8-…" />
+              <button type="submit">View order</button>
+            </div>
+          </form>
+          <div class="order-result hidden" id="order-result" aria-live="polite"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>Gulbahar Flowers</span><p>Made for celebrations across India.</p></footer>
+  </body>
+</html>

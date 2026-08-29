@@ -17,12 +17,15 @@
 import logging
 import sys
 from collections.abc import Sequence
+from pathlib import Path
 from absl import app as absl_app
 import config
 from exceptions import UcpError
 from fastapi import FastAPI
 from fastapi import Request
 from fastapi.responses import JSONResponse
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 import generated_routes.ucp_routes
 from routes.discovery import router as discovery_router
 from routes.catalog import router as catalog_router
@@ -78,6 +81,19 @@ app.include_router(discovery_router)
 app.include_router(catalog_router)
 app.include_router(mcp_router)
 app.include_router(razorpay_router)
+
+_STOREFRONT_DIR = Path(__file__).resolve().parent / "storefront"
+app.mount(
+  "/storefront",
+  StaticFiles(directory=_STOREFRONT_DIR, html=True),
+  name="storefront",
+)
+
+
+@app.get("/", include_in_schema=False)
+async def storefront_redirect() -> RedirectResponse:
+  """Open the Gulbahar Flowers storefront from the server root."""
+  return RedirectResponse(url="/storefront/")
 
 
 def main(argv: Sequence[str]) -> None:
