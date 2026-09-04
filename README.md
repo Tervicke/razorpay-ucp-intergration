@@ -9,7 +9,7 @@ journey from product discovery to an INR Razorpay payment and order lookup.
 
 ## Demo
 
-[Watch the Gulbahar UCP demo on YouTube](https://www.youtube.com/watch?v=8U4kPsxveX4).
+[Watch the Gulbahar UCP demo on YouTube](https://youtu.be/2TPOPG9u8OQ).
 
 ## What it demonstrates
 
