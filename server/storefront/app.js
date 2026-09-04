@@ -20,6 +20,10 @@ const escapeHtml = (value = "") =>
       ],
   );
 
+const requestId = () =>
+  globalThis.crypto?.randomUUID?.() ??
+  `request-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
 async function loadCatalog(query = "") {
   productGrid.innerHTML = "";
   catalogState.classList.remove("hidden");
@@ -108,7 +112,7 @@ async function findOrder(orderId) {
     const response = await fetch(`/orders/${encodeURIComponent(orderId)}`, {
       headers: {
         "UCP-Agent": 'profile="https://gulbahar.example/customer";version="2026-04-08"',
-        "Request-Id": crypto.randomUUID(),
+        "Request-Id": requestId(),
       },
     });
     if (response.status === 404) throw new Error("We could not find that order ID. Check it and try again.");
